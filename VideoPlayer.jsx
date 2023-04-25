@@ -1,25 +1,19 @@
-/** @format */
-
 import React, { useRef, useEffect } from 'react';
 
-const VideoPlayer = ({ src, autoPlay }) => {
+function VideoPlayer(props) {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    const handlePlay = (event) => {
-      const allVideos = document.querySelectorAll('video');
-      allVideos.forEach((v) => {
-        if (v !== event.target) {
-          v.pause();
-        }
+    const videos = document.querySelectorAll('video');
+    videos.forEach((video) => {
+      video.addEventListener('play', () => {
+        videos.forEach((otherVideo) => {
+          if (otherVideo !== video) {
+            otherVideo.pause();
+          }
+        });
       });
-    };
-
-    videoRef.current.addEventListener('play', handlePlay);
-
-    return () => {
-      videoRef.current.removeEventListener('play', handlePlay);
-    };
+    });
   }, []);
 
   return (
@@ -44,6 +38,6 @@ const VideoPlayer = ({ src, autoPlay }) => {
       />
     </div>
   );
-};
+}
 
 export default VideoPlayer;
